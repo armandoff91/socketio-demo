@@ -11,6 +11,8 @@ socket.on('connect', () => {
     // setInterval(() => {
     // }, 1000)
     socket.emit("msg", {
+        id: Math.floor(Math.random() * 100000),
+        sender: "client2",
         receipient: "client1",
         msg: "hi I am client 2"
     }, (res)=> {
@@ -26,4 +28,8 @@ socket.on('connect', () => {
 
 socket.on('msg', (msg) => {
     console.log("msg: "+ msg)
+})
+
+socket.on("received", (obj) => {
+    console.log("blue tick: " + obj.id)
 })
