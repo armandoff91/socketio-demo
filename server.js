@@ -6,6 +6,7 @@ const server = http.createServer(app);
 const { Server } = require("socket.io");
 const io = new Server(server);
 var unsentMessages = {}
+const msgHandler = require("./serverEventHandlers")
 app.get('/', (req, res) => {
   res.send("Hello world")
 });
@@ -30,20 +31,7 @@ io.on('connection', (socket) => {
     console.log("no unsent messages")
   }
 
-  socket.on("msg", (obj, callback) => {
-    console.log("msg emitted", obj)
-    if (io.of("/").adapter.rooms.get(obj.receipient)) {
-      console.log(io.of("/").adapter.rooms.get(obj.receipient).size)
-      socket.to(obj.receipient).emit("msg", obj.msg)
-    } else {
-      if (!unsentMessages[obj.receipient]) {
-        unsentMessages[obj.receipient] = []
-      }
-      unsentMessages[obj.receipient].push(obj)
-      console.log("unsent message saved")
-    }
-    callback("OK")
-  })
+  socket.on("msg", msgHandler(io, socket, unsentMessages))
 
   socket.on("received", (obj, callback) => {
     console.log("received emitted", obj)
