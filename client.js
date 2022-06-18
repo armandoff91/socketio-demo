@@ -12,7 +12,8 @@ socket.on('connect', () => {
 })
 
 socket.on('msg', (msg) => {
-    console.log("msg: "+ msg)
+    console.log("msg: ", msg)
+    socket.emit("received")
 })
 
 socket.on("broadcast", (msg) => {

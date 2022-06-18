@@ -8,12 +8,19 @@ var socket = io("http://localhost:3000", {
 
 socket.on('connect', () => {
     console.log("connected")
-    setInterval(() => {
-        socket.emit("msg", {
-            receipient: "client1",
-            msg: "hi I am client 2"
-        })
-    }, 1000)
+    // setInterval(() => {
+    // }, 1000)
+    socket.emit("msg", {
+        receipient: "client1",
+        msg: "hi I am client 2"
+    }, (res)=> {
+        if (res === "OK") {
+            console.log("1 grey tick")
+        }
+        if (res === "NOT OK") {
+            console.log("save resend the message")
+        }
+    })
 
 })
 
